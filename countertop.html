@@ -1,0 +1,1308 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Material UI — 조리대 상판 인터페이스 (Quiet Luxury · Editorial Minimal)</title>
+  <style>
+    /* ==========================================================================
+       RESET & BASE TYPOGRAPHY (100% OFFLINE STANDALONE - NO EXTERNAL CDN)
+       ========================================================================== */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    body {
+      background-color: #070809;
+      color: #e2e8f0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Pretendard", "Noto Sans KR", sans-serif;
+      height: 100vh;
+      width: 100vw;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .font-mono {
+      font-family: "SF Mono", Menlo, Consolas, Monaco, "Liberation Mono", monospace;
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* ==========================================================================
+       HEADER & NAVIGATION BAR (Editorial Precision)
+       ========================================================================== */
+    .header-bar {
+      height: 48px;
+      background: #0d0f12;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 0 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      z-index: 50;
+      flex-shrink: 0;
+    }
+
+    .brand-group {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .status-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #ffb800;
+      box-shadow: 0 0 10px #ffb800;
+      animation: pulseDot 2s infinite;
+    }
+
+    @keyframes pulseDot {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.35; transform: scale(0.8); }
+    }
+
+    .brand-title {
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.24em;
+      color: rgba(255, 255, 255, 0.95);
+      text-transform: uppercase;
+    }
+
+    .brand-subtitle {
+      font-size: 11px;
+      color: rgba(255, 255, 255, 0.45);
+      border-left: 1px solid rgba(255, 255, 255, 0.12);
+      padding-left: 12px;
+      letter-spacing: 0.04em;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .badge-sync {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      color: #34d399;
+      background: rgba(52, 211, 153, 0.08);
+      border: 1px solid rgba(52, 211, 153, 0.25);
+      padding: 4px 11px;
+      border-radius: 999px;
+    }
+
+    .sync-live-dot {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: #34d399;
+      animation: pulseDot 1.4s infinite;
+    }
+
+    .btn-action {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: rgba(255, 255, 255, 0.85);
+      font-size: 11px;
+      font-family: inherit;
+      padding: 5px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+
+    .btn-action:hover {
+      background: rgba(255, 255, 255, 0.14);
+      color: #ffffff;
+      border-color: rgba(255, 255, 255, 0.25);
+    }
+
+    /* ==========================================================================
+       MAIN COUNTERTOP SURFACE (Quiet Luxury · Vipp, B&O, Daniel Rybakken)
+       벨기에 무광 흑요석(Honed Obsidian Slab) 질감 & 서브서피스 산란
+       ========================================================================== */
+    .surface-container {
+      flex: 1;
+      padding: 12px 18px 14px 18px;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+      background: #08090b;
+    }
+
+    .meta-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+      padding: 0 6px;
+      font-size: 10px;
+      letter-spacing: 0.18em;
+      color: rgba(255, 255, 255, 0.4);
+      text-transform: uppercase;
+      flex-shrink: 0;
+    }
+
+    .countertop-slab {
+      flex: 1;
+      border-radius: 18px;
+      position: relative;
+      overflow: hidden;
+      cursor: crosshair;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      background-color: #111317;
+      background-image: 
+        radial-gradient(ellipse at 15% 25%, rgba(255, 255, 255, 0.025) 0%, transparent 60%),
+        radial-gradient(ellipse at 85% 75%, rgba(255, 255, 255, 0.018) 0%, transparent 65%),
+        repeating-linear-gradient(45deg, rgba(255,255,255,0.003) 0px, rgba(255,255,255,0.003) 1px, transparent 1px, transparent 12px),
+        radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.012) 0%, rgba(0, 0, 0, 0.35) 100%);
+      box-shadow: 
+        inset 0 1px 1px rgba(255, 255, 255, 0.12),
+        inset 0 0 35px rgba(0, 0, 0, 0.85),
+        0 25px 70px -15px rgba(0, 0, 0, 0.95);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    /* 12mm 돌 표면 산란 디퓨저 */
+    .slab-diffuser {
+      position: absolute;
+      inset: 0;
+      backdrop-filter: blur(2px);
+      -webkit-backdrop-filter: blur(2px);
+      pointer-events: none;
+      z-index: 10;
+    }
+
+    /* 밀링 마킹 (헤어라인 음각 가이드) */
+    .milled-label-left {
+      position: absolute;
+      top: 16px;
+      left: 24px;
+      font-size: 10px;
+      letter-spacing: 0.22em;
+      color: rgba(255, 255, 255, 0.28);
+      pointer-events: none;
+      z-index: 15;
+    }
+
+    .milled-label-right {
+      position: absolute;
+      top: 16px;
+      right: 24px;
+      font-size: 10px;
+      letter-spacing: 0.22em;
+      color: rgba(255, 255, 255, 0.28);
+      pointer-events: none;
+      z-index: 15;
+    }
+
+    /* 상판 터치/클릭 시 동적 생성되는 서브서피스 파문 링 */
+    .touch-ripple {
+      position: absolute;
+      border-radius: 50%;
+      pointer-events: none;
+      transform: translate(-50%, -50%);
+      mix-blend-mode: screen;
+      z-index: 8;
+      animation: touchRippleFade 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    @keyframes touchRippleFade {
+      0% {
+        width: 10px;
+        height: 10px;
+        opacity: 0.9;
+        background: radial-gradient(circle, rgba(255, 255, 255, 0.9) 0%, rgba(255, 184, 0, 0.6) 35%, transparent 70%);
+        box-shadow: 0 0 20px rgba(255, 184, 0, 0.6);
+      }
+      100% {
+        width: 260px;
+        height: 260px;
+        opacity: 0;
+        background: radial-gradient(circle, rgba(255, 255, 255, 0) 20%, rgba(255, 184, 0, 0.2) 60%, transparent 80%);
+        box-shadow: 0 0 60px rgba(255, 184, 0, 0);
+      }
+    }
+
+    /* ==========================================================================
+       DANIEL RYBAKKEN SUBSURFACE VOLUMETRIC LIGHTING (빛 예술 산란)
+       화구와 도마의 중심에 완벽하게 일치하도록 앵커링된 발광 이펙트
+       ========================================================================== */
+    .light-anchor {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+      z-index: 5;
+    }
+
+    /* 1. 호박색 가열 헤일로 & 호흡 */
+    @keyframes rybakkenAmberBreathe {
+      0%, 100% {
+        transform: scale(0.97);
+        opacity: 0.85;
+        filter: drop-shadow(0 0 50px rgba(255, 149, 0, 0.58)) drop-shadow(0 0 110px rgba(230, 81, 0, 0.32));
+      }
+      50% {
+        transform: scale(1.05);
+        opacity: 1;
+        filter: drop-shadow(0 0 85px rgba(255, 180, 0, 0.85)) drop-shadow(0 0 150px rgba(230, 81, 0, 0.55));
+      }
+    }
+
+    .halo-amber-glow {
+      position: absolute;
+      width: 330px;
+      height: 330px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255, 244, 214, 0.92) 0%, rgba(255, 184, 0, 0.65) 30%, rgba(230, 81, 0, 0.3) 65%, transparent 80%);
+      filter: blur(28px);
+      mix-blend-mode: screen;
+      animation: rybakkenAmberBreathe 4.2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+    }
+
+    .halo-ring {
+      position: absolute;
+      width: 260px;
+      height: 260px;
+      border-radius: 50%;
+      border: 1px solid rgba(255, 184, 0, 0.45);
+      box-shadow: 0 0 35px rgba(255, 149, 0, 0.5);
+    }
+
+    .halo-dashed-ring {
+      position: absolute;
+      width: 300px;
+      height: 300px;
+      border-radius: 50%;
+      border: 1px dashed rgba(255, 184, 0, 0.25);
+      animation: spinRing 32s linear infinite;
+    }
+
+    @keyframes spinRing {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    /* 2. 신선 청색 파문 (Blue Ripple) */
+    @keyframes rippleAnim1 {
+      0% { transform: scale(0.2); opacity: 0.95; }
+      70% { opacity: 0.45; }
+      100% { transform: scale(2.6); opacity: 0; }
+    }
+    @keyframes rippleAnim2 {
+      0% { transform: scale(0.2); opacity: 0; }
+      30% { opacity: 0.85; }
+      100% { transform: scale(3.1); opacity: 0; }
+    }
+
+    .ripple-ring-1 {
+      position: absolute;
+      width: 210px;
+      height: 210px;
+      border-radius: 50%;
+      border: 1.5px solid rgba(0, 180, 216, 0.85);
+      mix-blend-mode: screen;
+      animation: rippleAnim1 3s cubic-bezier(0.16, 1, 0.3, 1) infinite;
+    }
+
+    .ripple-ring-2 {
+      position: absolute;
+      width: 210px;
+      height: 210px;
+      border-radius: 50%;
+      border: 1px solid rgba(0, 119, 182, 0.7);
+      mix-blend-mode: screen;
+      animation: rippleAnim2 3s cubic-bezier(0.16, 1, 0.3, 1) 0.9s infinite;
+    }
+
+    .ripple-center-glow {
+      position: absolute;
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      background: rgba(0, 212, 255, 0.18);
+      filter: blur(22px);
+      mix-blend-mode: screen;
+    }
+
+    /* 3. 과열 적색 불규칙 점멸 (Crimson High-Tension Flicker) */
+    @keyframes redFlickerFast {
+      0% { opacity: 0.2; transform: scale(1.02); }
+      10% { opacity: 1; transform: scale(1.22); filter: drop-shadow(0 0 110px rgba(229, 57, 53, 0.95)); }
+      20% { opacity: 0.25; transform: scale(1.18); }
+      35% { opacity: 0.95; transform: scale(1.28); }
+      50% { opacity: 0.3; }
+      60% { opacity: 1; transform: scale(1.36); filter: drop-shadow(0 0 160px rgba(139, 0, 0, 1)); }
+      75% { opacity: 0.25; }
+      88% { opacity: 0.9; transform: scale(1.24); }
+      100% { opacity: 0.7; transform: scale(1.15); }
+    }
+
+    .overheat-flicker-glow {
+      position: absolute;
+      width: 440px;
+      height: 440px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255, 205, 210, 0.9) 0%, rgba(229, 57, 53, 0.75) 35%, rgba(139, 0, 0, 0.4) 70%, transparent 85%);
+      filter: blur(30px);
+      mix-blend-mode: screen;
+      animation: redFlickerFast 1.05s infinite;
+    }
+
+    .overheat-border-ring {
+      position: absolute;
+      width: 320px;
+      height: 320px;
+      border-radius: 50%;
+      border: 2.5px solid #e53935;
+      box-shadow: 0 0 70px 20px rgba(229, 57, 53, 0.9);
+      animation: redFlickerFast 1.05s infinite;
+    }
+
+    /* 4. 완료 웜 화이트 맥동 (Dawn Luminous Pulse) */
+    @keyframes dawnPulseAnim {
+      0% { transform: scale(0.7); opacity: 0; }
+      30% { transform: scale(1.5); opacity: 1; filter: drop-shadow(0 0 150px rgba(255, 248, 234, 0.98)) drop-shadow(0 0 210px rgba(255, 224, 130, 0.8)); }
+      70% { transform: scale(1.15); opacity: 0.85; }
+      100% { transform: scale(1.0); opacity: 0.6; }
+    }
+
+    .done-white-pulse {
+      position: absolute;
+      width: 410px;
+      height: 410px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255, 255, 255, 0.95) 0%, rgba(255, 248, 234, 0.7) 40%, rgba(255, 224, 130, 0.25) 70%, transparent 85%);
+      filter: blur(32px);
+      mix-blend-mode: screen;
+      animation: dawnPulseAnim 2.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    /* 5. 영수증 레이저 스캔 빔 */
+    .scan-laser-beam {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 0;
+      height: 50px;
+      pointer-events: none;
+      transition: top 0.08s linear;
+      z-index: 25;
+      mix-blend-mode: screen;
+    }
+    .scan-line {
+      width: 100%;
+      height: 2px;
+      background: #ffea79;
+      box-shadow: 0 0 24px 8px rgba(255, 184, 0, 0.95);
+    }
+    .scan-gradient {
+      width: 100%;
+      height: 42px;
+      background: linear-gradient(to bottom, rgba(255, 184, 0, 0.22), transparent);
+      filter: blur(4px);
+    }
+
+    /* 에디토리얼 글리프 텍스트 */
+    .editorial-glyph {
+      font-size: 11px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      text-shadow: 0 0 10px currentColor, 0 0 24px currentColor;
+    }
+
+    /* ==========================================================================
+       PHYSICAL ZONES & INTERACTIVE OBJECTS (도마 & 냄비 탑다운)
+       ========================================================================== */
+    .zones-layer {
+      position: relative;
+      z-index: 15;
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      padding: 0 40px;
+      pointer-events: none;
+    }
+
+    /* 손질존 (도마 서브플레이트) */
+    .prep-board {
+      width: 270px;
+      height: 295px;
+      border-radius: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.09);
+      background: rgba(255, 255, 255, 0.018);
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      pointer-events: auto;
+      transition: all 0.3s;
+      box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
+    }
+
+    .prep-board:hover {
+      border-color: rgba(255, 255, 255, 0.18);
+      background: rgba(255, 255, 255, 0.028);
+    }
+
+    /* 가열존 (플렉스 인덕션 화구) */
+    .induction-zone {
+      width: 295px;
+      height: 295px;
+      border-radius: 50%;
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      background: rgba(255, 255, 255, 0.012);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      pointer-events: auto;
+      cursor: pointer;
+      transition: all 0.3s;
+      box-shadow: inset 0 0 30px rgba(0,0,0,0.6);
+    }
+
+    .induction-zone:hover {
+      border-color: rgba(255, 184, 0, 0.45);
+    }
+
+    /* 정밀 각도 눈금 링 */
+    .induction-ticks {
+      position: absolute;
+      inset: 6px;
+      border-radius: 50%;
+      border: 1px dashed rgba(255, 255, 255, 0.12);
+      pointer-events: none;
+    }
+
+    /* 프리미엄 주철 뚝배기/냄비 3D 렌더 */
+    .pot-object {
+      width: 180px;
+      height: 180px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 30%, #20232b 0%, #111317 70%, #090a0d 100%);
+      border: 2px solid rgba(255, 255, 255, 0.24);
+      box-shadow: 
+        0 25px 60px rgba(0, 0, 0, 0.95),
+        inset 0 2px 4px rgba(255, 255, 255, 0.2),
+        inset 0 -4px 10px rgba(0, 0, 0, 0.8);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s;
+      z-index: 10;
+      position: relative;
+    }
+
+    .pot-lid-knob {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 35%, #555b6e, #1a1c22);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.6);
+      margin-bottom: 4px;
+    }
+
+    .pot-object:hover {
+      border-color: #ffb800;
+      transform: scale(1.02);
+    }
+
+    /* 냄비/도마 하단 전용 캡션 앵커 (겹침 완전 방지) */
+    .zone-status-caption {
+      position: absolute;
+      bottom: -36px;
+      left: 0;
+      right: 0;
+      text-align: center;
+      white-space: nowrap;
+      pointer-events: none;
+      z-index: 20;
+    }
+
+    /* ==========================================================================
+       PANTRY GLANCE STRIPE (앞 가장자리 재고 띠 - 캄테크 1단계)
+       ========================================================================== */
+    .pantry-stripe {
+      height: 44px;
+      background: rgba(0, 0, 0, 0.55);
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 0 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      z-index: 25;
+      font-size: 11px;
+      flex-shrink: 0;
+    }
+
+    .inventory-chips {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      overflow-x: auto;
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+    .inventory-chips::-webkit-scrollbar { display: none; }
+
+    .chip-item {
+      padding: 3px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(255, 255, 255, 0.035);
+      color: rgba(255, 255, 255, 0.75);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      white-space: nowrap;
+      transition: all 0.2s;
+    }
+
+    .chip-urgent {
+      background: rgba(230, 81, 0, 0.2);
+      border-color: rgba(255, 149, 0, 0.7);
+      color: #ffe082;
+      box-shadow: 0 0 14px rgba(255, 149, 0, 0.3);
+    }
+
+    /* ==========================================================================
+       BOTTOM SCENARIO DEMONSTRATION DOCK (시나리오 원클릭 실행)
+       ========================================================================== */
+    .scenario-dock {
+      margin-top: 8px;
+      background: #0f1115;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      padding: 8px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      z-index: 30;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+      flex-shrink: 0;
+    }
+
+    .dock-buttons {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      overflow-x: auto;
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+    .dock-buttons::-webkit-scrollbar { display: none; }
+
+    .btn-scenario {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      color: rgba(255, 255, 255, 0.75);
+      font-size: 11px;
+      padding: 6px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s;
+      font-family: inherit;
+    }
+
+    .btn-scenario:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: #ffffff;
+    }
+
+    .btn-scenario.active-amber {
+      background: #ffb800;
+      color: #000000;
+      font-weight: 700;
+      border-color: #ffd54f;
+      box-shadow: 0 0 16px rgba(255, 184, 0, 0.5);
+    }
+
+    .btn-scenario.active-red {
+      background: #e53935;
+      color: #ffffff;
+      font-weight: 700;
+      border-color: #ff5252;
+      box-shadow: 0 0 20px rgba(229, 57, 53, 0.7);
+      animation: pulseDot 1s infinite;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ==================== GLOBAL HEADER ==================== -->
+  <header class="header-bar">
+    <div class="brand-group">
+      <div class="status-dot"></div>
+      <span class="brand-title font-mono">MATERIAL UI // SURFACE</span>
+      <span class="brand-subtitle">돌 표면 앰비언트 주방 인터페이스 · 태블릿 전용</span>
+    </div>
+
+    <div class="header-actions">
+      <div class="badge-sync font-mono" id="syncStatusBadge">
+        <span class="sync-live-dot"></span>
+        <span id="syncText">모바일 앱과 실시간 동기화됨</span>
+      </div>
+
+      <button class="btn-action" id="btnOpenMobile" title="모바일 컴패니언 앱을 새 창으로 열기">
+        <span>📱 모바일 앱 열기</span>
+      </button>
+
+      <button class="btn-action font-mono" id="btnToggleSound">
+        <span id="soundLabel">🔊 SOUND ON</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- ==================== MAIN SURFACE SLAB ==================== -->
+  <main class="surface-container">
+    <div class="meta-bar font-mono">
+      <div>HONED OBSIDIAN SLAB · 2200 × 1050 MM // 12MM SUBSURFACE MATRIX</div>
+      <div id="modeStatusText">MODE: ZERO-STATE (소등 대기)</div>
+    </div>
+
+    <div class="countertop-slab" id="slab">
+      <div class="slab-diffuser"></div>
+      
+      <!-- 정밀 밀링 마킹 레이블 -->
+      <div class="milled-label-left font-mono">SEC_01 // LOAD CELL PREPARATION & E-NOSE</div>
+      <div class="milled-label-right font-mono">SEC_02 // FLEX INDUCTION THERMAL CORE</div>
+
+      <!-- 전면 스캔 레이저 바 (영수증 모드 시 점등) -->
+      <div id="scanLaserWrapper"></div>
+
+      <!-- ==================== 물리 존 & 오브젝트 레이어 ==================== -->
+      <div class="zones-layer">
+        
+        <!-- 손질존 (도마 서브플레이트) -->
+        <div class="prep-board" id="prepBoard">
+          <!-- 도마 중심 발광 앵커 -->
+          <div class="light-anchor" id="prepLightAnchor"></div>
+
+          <div style="position: absolute; top: 12px; left: 14px; font-size: 9px; color: rgba(255,255,255,0.35); letter-spacing: 0.15em;" class="font-mono">SUBPLATE // 01</div>
+          
+          <div id="prepContent" style="display: flex; flex-direction: column; align-items: center; text-align: center; z-index: 10;">
+            <!-- 동적 주입 (재료 올림/소등 상태) -->
+          </div>
+
+          <!-- 도마 하단 상태 캡션 -->
+          <div class="zone-status-caption font-mono" id="prepCaption"></div>
+        </div>
+
+        <!-- 가열존 (플렉스 인덕션 화구 1구) -->
+        <div class="induction-zone" id="inductionZone" onclick="toggleCooking()">
+          <!-- 화구 중심 발광 앵커 -->
+          <div class="light-anchor" id="heatLightAnchor"></div>
+          <div class="induction-ticks"></div>
+
+          <div style="position: absolute; top: 14px; font-size: 9px; color: rgba(255,255,255,0.35); letter-spacing: 0.15em;" class="font-mono">INDUCTION COIL // 01</div>
+          
+          <div id="potContainer" style="display: flex; flex-direction: column; align-items: center; z-index: 10;">
+            <!-- 동적 주입 -->
+          </div>
+
+          <!-- 냄비 하단 상태 캡션 -->
+          <div class="zone-status-caption font-mono" id="heatCaption"></div>
+        </div>
+
+      </div>
+
+      <!-- ==================== 앞 가장자리 재고 띠 (Glance Stripe) ==================== -->
+      <div class="pantry-stripe">
+        <div style="display: flex; align-items: center; gap: 12px; overflow: hidden;">
+          <span style="color: rgba(255,255,255,0.4); font-size: 10px; letter-spacing: 0.15em; flex-shrink: 0;" class="font-mono">PANTRY GLANCE STRIPE:</span>
+          <div class="inventory-chips" id="inventoryChips">
+            <!-- 동적 주입 -->
+          </div>
+        </div>
+        <div style="color: rgba(255,255,255,0.3); font-size: 10px; letter-spacing: 0.15em; flex-shrink: 0;" class="font-mono">
+          APPROACH SENSING: 300MM
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== 하단 시나리오 툴바 독 ==================== -->
+    <div class="scenario-dock">
+      <div class="dock-buttons">
+        <span style="font-size: 10px; letter-spacing: 0.15em; color: rgba(255,255,255,0.4); margin-right: 4px;" class="font-mono">SCENARIOS:</span>
+        <button class="btn-scenario active-amber font-mono" id="btnZero" onclick="setZeroState()">0. 대기(소등)</button>
+        <button class="btn-scenario font-mono" id="btnScan" onclick="triggerScenarioScan()">A. 영수증 스캔</button>
+        <button class="btn-scenario font-mono" id="btnCook" onclick="triggerScenarioCooking()">B. 화구 가열(팬 올림)</button>
+        <button class="btn-scenario font-mono" id="btnOverheat" onclick="triggerScenarioOverheat()">C. 과열 위험 연출</button>
+        <button class="btn-scenario font-mono" id="btnDone" onclick="triggerScenarioDone()">완료 맥동</button>
+        <button class="btn-scenario font-mono" id="btnRecipe" onclick="triggerScenarioRecipe()">레시피 가이드</button>
+      </div>
+      <div style="font-size: 10px; color: rgba(255,255,255,0.35);" class="font-mono">
+        100% OFFLINE STANDALONE
+      </div>
+    </div>
+  </main>
+
+  <!-- ==========================================================================
+       VANILLA JAVASCRIPT: STATE MACHINE, WEB AUDIO, CROSS-WINDOW SYNC
+       ========================================================================== -->
+  <script>
+    // --- 1. Sound Engine (Vanilla Web Audio API) ---
+    class SoundEngine {
+      constructor() {
+        this.ctx = null;
+        this.enabled = true;
+      }
+      init() {
+        if (!this.ctx && (window.AudioContext || window.webkitAudioContext)) {
+          this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+        }
+        if (this.ctx && this.ctx.state === 'suspended') {
+          this.ctx.resume();
+        }
+      }
+      playStoneTap() {
+        if (!this.enabled) return;
+        this.init();
+        if (!this.ctx) return;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(320, this.ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(120, this.ctx.currentTime + 0.08);
+        gain.gain.setValueAtTime(0.12, this.ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.08);
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.start();
+        osc.stop(this.ctx.currentTime + 0.08);
+      }
+      playLowAlert() {
+        if (!this.enabled) return;
+        this.init();
+        if (!this.ctx) return;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(220, this.ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(140, this.ctx.currentTime + 0.35);
+        gain.gain.setValueAtTime(0.3, this.ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.35);
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.start();
+        osc.stop(this.ctx.currentTime + 0.35);
+      }
+      playChime() {
+        if (!this.enabled) return;
+        this.init();
+        if (!this.ctx) return;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(432, this.ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(864, this.ctx.currentTime + 0.5);
+        gain.gain.setValueAtTime(0.18, this.ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.55);
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.start();
+        osc.stop(this.ctx.currentTime + 0.55);
+      }
+      playWarmTone() {
+        if (!this.enabled) return;
+        this.init();
+        if (!this.ctx) return;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(160, this.ctx.currentTime);
+        osc.frequency.linearRampToValueAtTime(240, this.ctx.currentTime + 0.4);
+        gain.gain.setValueAtTime(0.15, this.ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.45);
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.start();
+        osc.stop(this.ctx.currentTime + 0.45);
+      }
+    }
+    const sound = new SoundEngine();
+
+    // --- 2. State & Data ---
+    let currentMode = 'zero'; // 'zero' | 'scan' | 'cooking' | 'overheat' | 'completed' | 'prep_fresh' | 'prep_spoil' | 'recipe'
+    let cookingData = {
+      active: false,
+      potPlaced: false,
+      temp: 94.2,
+      secondsElapsed: 184,
+      targetFood: '차돌 된장찌개',
+      maillardVOC: 85
+    };
+    let inventory = [
+      { id: 'item-1', name: '강릉 초당두부', daysLeft: 1, urgent: true, weight: '340g' },
+      { id: 'item-2', name: '친환경 애호박', daysLeft: 4, urgent: false, weight: '1개' },
+      { id: 'item-3', name: '한우 1등급 양지', daysLeft: 2, urgent: true, weight: '220g' },
+      { id: 'item-4', name: '깐 대파 & 양파', daysLeft: 7, urgent: false, weight: '1봉' }
+    ];
+    let cookingTimerInterval = null;
+    let scanInterval = null;
+
+    // --- 3. 3중 크로스 윈도우 동기화 (BroadcastChannel + LocalStorage + StorageEvent) ---
+    const SYNC_CHANNEL_KEY = 'material_ui_ambient_sync_bus';
+    let broadcastChan = null;
+    try {
+      if (typeof BroadcastChannel !== 'undefined') {
+        broadcastChan = new BroadcastChannel(SYNC_CHANNEL_KEY);
+        broadcastChan.onmessage = (e) => handleSyncMessage(e.data);
+      }
+    } catch(err) {}
+
+    window.addEventListener('storage', (e) => {
+      if (e.key === SYNC_CHANNEL_KEY && e.newValue) {
+        try {
+          handleSyncMessage(JSON.parse(e.newValue));
+        } catch(err) {}
+      }
+    });
+
+    let lastHandledTs = 0;
+    setInterval(() => {
+      try {
+        const raw = localStorage.getItem(SYNC_CHANNEL_KEY);
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          if (parsed && parsed.ts && parsed.ts > lastHandledTs) {
+            lastHandledTs = parsed.ts;
+            handleSyncMessage(parsed);
+          }
+        }
+      } catch(e) {}
+    }, 100);
+
+    function broadcastState(type, payload) {
+      const msg = { type, payload, ts: Date.now() };
+      lastHandledTs = msg.ts;
+      if (broadcastChan) {
+        broadcastChan.postMessage(msg);
+      }
+      try {
+        localStorage.setItem(SYNC_CHANNEL_KEY, JSON.stringify(msg));
+      } catch(e) {}
+    }
+
+    function handleSyncMessage(msg) {
+      if (!msg || !msg.type) return;
+      switch(msg.type) {
+        case 'REMOTE_SHUTOFF':
+        case 'SET_ZERO':
+          setZeroState(false);
+          break;
+        case 'START_COOKING':
+          triggerScenarioCooking(false);
+          break;
+        case 'START_OVERHEAT':
+          triggerScenarioOverheat(false);
+          break;
+        case 'START_RECIPE':
+          triggerScenarioRecipe(false);
+          break;
+        case 'DONE_COOKING':
+          triggerScenarioDone(false);
+          break;
+        case 'TRIGGER_SCENARIO_A':
+          triggerScenarioScan(false);
+          break;
+      }
+    }
+
+    // --- 4. Renderers ---
+    function renderInventory() {
+      const container = document.getElementById('inventoryChips');
+      container.innerHTML = inventory.map(item => `
+        <div class="chip-item ${item.urgent ? 'chip-urgent' : ''}">
+          <span style="width: 5px; height: 5px; border-radius: 50%; background: ${item.urgent ? '#ffb800' : '#00b4d8'};"></span>
+          <span>${item.name}</span>
+          <span style="opacity: 0.6; font-size: 10px;" class="font-mono">D-${item.daysLeft}</span>
+        </div>
+      `).join('');
+    }
+
+    function renderPrepBoard() {
+      const container = document.getElementById('prepContent');
+      if (currentMode === 'prep_fresh') {
+        container.innerHTML = `
+          <div style="width: 62px; height: 62px; border-radius: 12px; background: rgba(0, 229, 255, 0.12); border: 1.5px solid rgba(0, 229, 255, 0.6); display: flex; align-items: center; justify-content: center; font-size: 26px; box-shadow: 0 0 25px rgba(0, 229, 255, 0.35);">
+            🌿
+          </div>
+          <span style="font-size: 12px; font-weight: 700; color: #00e5ff; margin-top: 6px;">신선 재료 로드셀 감지</span>
+          <span style="font-size: 10px; color: rgba(255,255,255,0.7); margin-top: 2px;" class="font-mono">LOAD: 210.0 G // FRESH 98%</span>
+          <button class="btn-action" style="margin-top: 8px; font-size: 9px; padding: 2px 8px; color: rgba(255,255,255,0.6);" onclick="setZeroState(true); event.stopPropagation();">
+            재료 치우기 (소등)
+          </button>
+        `;
+      } else if (currentMode === 'prep_spoil') {
+        container.innerHTML = `
+          <div style="width: 62px; height: 62px; border-radius: 12px; background: rgba(239, 68, 68, 0.15); border: 1.5px solid rgba(239, 68, 68, 0.7); display: flex; align-items: center; justify-content: center; font-size: 26px; box-shadow: 0 0 25px rgba(239, 68, 68, 0.4);">
+            ⚠️
+          </div>
+          <span style="font-size: 12px; font-weight: 700; color: #ff5252; margin-top: 6px;">부패 의심 재료 감지</span>
+          <span style="font-size: 10px; color: #ffcdd2; margin-top: 2px;" class="font-mono">NH₃ 145 PPB (기준치 초과)</span>
+          <button class="btn-action" style="margin-top: 8px; font-size: 9px; padding: 2px 8px; color: rgba(255,255,255,0.6);" onclick="setZeroState(true); event.stopPropagation();">
+            재료 치우기 (소등)
+          </button>
+        `;
+      } else {
+        container.innerHTML = `
+          <div style="width: 46px; height: 46px; border-radius: 50%; border: 1px dashed rgba(255,255,255,0.2); display: flex; align-items: center; justify-content: center; font-size: 18px; color: rgba(255,255,255,0.4); margin-bottom: 6px;">+</div>
+          <span style="font-size: 11px; color: rgba(255,255,255,0.6);">재료를 올려보세요</span>
+          <div style="display: flex; gap: 6px; margin-top: 10px;">
+            <button class="btn-action" style="font-size: 9px; padding: 3px 8px; border-color: rgba(0,180,216,0.5); color: #00e5ff;" onclick="triggerPrepFresh(event)">신선 재료</button>
+            <button class="btn-action" style="font-size: 9px; padding: 3px 8px; border-color: rgba(229,57,53,0.5); color: #ff5252;" onclick="triggerPrepSpoil(event)">부패 재료</button>
+          </div>
+        `;
+      }
+    }
+
+    function renderPotZone() {
+      const potContainer = document.getElementById('potContainer');
+      if (cookingData.potPlaced || currentMode === 'cooking' || currentMode === 'overheat') {
+        potContainer.innerHTML = `
+          <div class="pot-object">
+            <div class="pot-lid-knob"></div>
+            <span style="font-size: 9px; color: rgba(255,255,255,0.45); letter-spacing: 0.15em;" class="font-mono">CAST IRON</span>
+            <span style="font-size: 12px; font-weight: 700; color: #ffffff; letter-spacing: 0.05em; margin-top: 1px;">전통 뚝배기</span>
+            <span style="font-size: 12px; color: ${currentMode === 'overheat' ? '#ff5252' : '#ffb800'}; font-weight: 700; margin-top: 3px;" class="font-mono">
+              ${currentMode === 'overheat' ? '290.0°C 위험' : cookingData.temp.toFixed(1) + '°C'}
+            </span>
+            <span style="font-size: 8px; color: rgba(255,255,255,0.35); margin-top: 4px;" class="font-mono">[클릭: 냄비 내리기]</span>
+          </div>
+        `;
+      } else {
+        potContainer.innerHTML = `
+          <div style="width: 48px; height: 48px; border-radius: 50%; border: 1px dashed rgba(255,255,255,0.2); display: flex; align-items: center; justify-content: center; font-size: 16px; color: rgba(255,255,255,0.4); margin-bottom: 4px;">○</div>
+          <span style="font-size: 11px; color: rgba(255,255,255,0.65);">냄비 올리기 (클릭)</span>
+          <span style="font-size: 9px; color: rgba(255,255,255,0.35); margin-top: 2px;" class="font-mono">FEEDFORWARD READY</span>
+        `;
+      }
+    }
+
+    function renderLightLayer() {
+      const heatAnchor = document.getElementById('heatLightAnchor');
+      const prepAnchor = document.getElementById('prepLightAnchor');
+      const scanWrapper = document.getElementById('scanLaserWrapper');
+      const modeText = document.getElementById('modeStatusText');
+      const heatCaption = document.getElementById('heatCaption');
+      const prepCaption = document.getElementById('prepCaption');
+
+      heatAnchor.innerHTML = '';
+      prepAnchor.innerHTML = '';
+      scanWrapper.innerHTML = '';
+      heatCaption.innerHTML = '';
+      prepCaption.innerHTML = '';
+
+      renderPrepBoard();
+
+      if (currentMode === 'zero') {
+        modeText.innerText = 'MODE: ZERO-STATE (소등 대기)';
+      } else if (currentMode === 'scan') {
+        modeText.innerText = 'MODE: S16 RECEIPT SPECTRAL SCAN';
+        scanWrapper.innerHTML = `
+          <div class="scan-laser-beam" id="scanBeam">
+            <div class="scan-line"></div>
+            <div class="scan-gradient"></div>
+          </div>
+        `;
+      } else if (currentMode === 'cooking' || currentMode === 'completed') {
+        modeText.innerText = currentMode === 'completed' ? 'MODE: S07 COOKING COMPLETED (DAWN PULSE)' : 'MODE: S05 AMBER HALO SIMMERING';
+        
+        heatAnchor.innerHTML = `
+          <div class="halo-amber-glow"></div>
+          <div class="halo-ring"></div>
+          <div class="halo-dashed-ring"></div>
+          ${currentMode === 'completed' ? '<div class="done-white-pulse"></div>' : ''}
+        `;
+
+        heatCaption.innerHTML = `
+          <div class="editorial-glyph" style="color: ${currentMode === 'completed' ? '#ffffff' : '#fff4d6'}; font-size: 11px;">
+            ${currentMode === 'completed' ? 'PERFECT DONENESS REACHED · FLAME OFF' : cookingData.targetFood + ' // ACTIVE SIMMER'}
+          </div>
+          <div style="font-size: 10px; color: #ffb800; opacity: 0.85; margin-top: 3px;">
+            TEMP ${cookingData.temp.toFixed(1)}°C | MAILLARD ${cookingData.maillardVOC}%
+          </div>
+        `;
+      } else if (currentMode === 'overheat') {
+        modeText.innerText = 'MODE: S21 OVERHEAT CRITICAL HAZARD';
+        
+        heatAnchor.innerHTML = `
+          <div class="overheat-flicker-glow"></div>
+          <div class="overheat-border-ring"></div>
+        `;
+
+        heatCaption.innerHTML = `
+          <div class="editorial-glyph" style="color: #ff5252; font-weight: 700; font-size: 12px;">
+            OVERHEAT WARNING // OIL TEMP 290°C CRITICAL
+          </div>
+          <div style="font-size: 10px; color: #ffebee; background: rgba(183,28,28,0.85); padding: 3px 12px; border-radius: 999px; margin-top: 5px; border: 1px solid #ff5252; display: inline-block;">
+            가열 중 자리 비움 3분 30초 감지 · 모바일 비상 알림 발송됨
+          </div>
+        `;
+      } else if (currentMode === 'prep_fresh') {
+        modeText.innerText = 'MODE: S04 PREP BOARD // FRESH (CYAN RIPPLE)';
+        
+        prepAnchor.innerHTML = `
+          <div class="ripple-ring-1"></div>
+          <div class="ripple-ring-2"></div>
+          <div class="ripple-center-glow"></div>
+        `;
+
+        prepCaption.innerHTML = `
+          <div class="editorial-glyph" style="color: #00e5ff; font-size: 11px;">FRESHNESS INDEX 98% // NH₃ 08 PPB</div>
+          <div style="font-size: 9px; color: rgba(255,255,255,0.5); margin-top: 2px;">WEIGHT 210.0 G // OPTIMAL</div>
+        `;
+      } else if (currentMode === 'prep_spoil') {
+        modeText.innerText = 'MODE: S04 PREP BOARD // SPOILAGE ALERT';
+        
+        prepAnchor.innerHTML = `
+          <div style="width: 220px; height: 220px; border-radius: 50%; background: rgba(229,57,53,0.3); filter: blur(24px);" class="overheat-flicker-glow"></div>
+          <div style="width: 170px; height: 170px; border-radius: 50%; border: 2px solid #e53935; box-shadow: 0 0 35px #e53935;" class="overheat-border-ring"></div>
+        `;
+
+        prepCaption.innerHTML = `
+          <div class="editorial-glyph" style="color: #ff5252; font-weight: 700; font-size: 11px;">SPOILAGE RISK DETECTED // NH₃ 145 PPB</div>
+          <div style="font-size: 9px; color: #ffcdd2; margin-top: 2px;">소비기한 초과 의심 재료입니다</div>
+        `;
+      } else if (currentMode === 'recipe') {
+        modeText.innerText = 'MODE: S19 RECIPE STEP GUIDE ("된장찌개")';
+        
+        prepAnchor.innerHTML = `
+          <div class="halo-dashed-ring" style="width: 180px; height: 180px;"></div>
+          <div style="text-align: center;" class="editorial-glyph">
+            <div style="font-size: 9px; color: rgba(255,255,255,0.5);">육수 계량 가이드</div>
+            <div style="font-size: 19px; color: #ffffff; font-weight: 300;">150 ML</div>
+          </div>
+        `;
+
+        prepCaption.innerHTML = `
+          <div class="editorial-glyph" style="font-size: 11px; color: #ffe082;">
+            <span style="background: #ffb800; color: #000; padding: 2px 6px; border-radius: 4px; font-weight: 700; font-size: 9px;">STEP 3/6</span>
+            <span>된장 2스푼을 체에 걸러 풀기</span>
+          </div>
+        `;
+      }
+    }
+
+    function updateDockActiveButton(id) {
+      document.querySelectorAll('.btn-scenario').forEach(b => b.className = 'btn-scenario font-mono');
+      const target = document.getElementById(id);
+      if (target) {
+        target.className = id === 'btnOverheat' ? 'btn-scenario active-red font-mono' : 'btn-scenario active-amber font-mono';
+      }
+    }
+
+    // --- 5. Interactive Actions ---
+    function setZeroState(broadcast = true) {
+      currentMode = 'zero';
+      cookingData.active = false;
+      cookingData.potPlaced = false;
+      clearInterval(cookingTimerInterval);
+      clearInterval(scanInterval);
+      renderPotZone();
+      renderLightLayer();
+      updateDockActiveButton('btnZero');
+      if (broadcast) {
+        broadcastState('SET_ZERO', {});
+      }
+    }
+
+    function toggleCooking() {
+      if (cookingData.active || currentMode === 'cooking' || currentMode === 'overheat') {
+        setZeroState(true);
+      } else {
+        triggerScenarioCooking(true);
+      }
+    }
+
+    function triggerScenarioScan(broadcast = true) {
+      setZeroState(false);
+      currentMode = 'scan';
+      renderLightLayer();
+      updateDockActiveButton('btnScan');
+      sound.playWarmTone();
+      if (broadcast) {
+        broadcastState('TRIGGER_SCENARIO_A', {});
+      }
+
+      let p = 0;
+      clearInterval(scanInterval);
+      scanInterval = setInterval(() => {
+        p += 3.5;
+        const beam = document.getElementById('scanBeam');
+        if (beam) {
+          beam.style.top = p + '%';
+        }
+        if (p >= 100) {
+          clearInterval(scanInterval);
+          sound.playChime();
+          const newItems = [
+            { id: 'item-' + Date.now() + '-1', name: '햇 달래 & 팽이버섯', daysLeft: 3, urgent: false, weight: '150g' },
+            { id: 'item-' + Date.now() + '-2', name: '청양고추 & 감자', daysLeft: 6, urgent: false, weight: '1봉' }
+          ];
+          inventory = [...newItems, ...inventory];
+          renderInventory();
+          broadcastState('UPDATE_INVENTORY', inventory);
+          setTimeout(() => {
+            setZeroState(true);
+          }, 1000);
+        }
+      }, 65);
+    }
+
+    function triggerScenarioCooking(broadcast = true) {
+      clearInterval(scanInterval);
+      currentMode = 'cooking';
+      cookingData.active = true;
+      cookingData.potPlaced = true;
+      cookingData.temp = 94.2;
+      cookingData.secondsElapsed = 184;
+      cookingData.maillardVOC = 85;
+      sound.playWarmTone();
+      renderPotZone();
+      renderLightLayer();
+      updateDockActiveButton('btnCook');
+
+      clearInterval(cookingTimerInterval);
+      cookingTimerInterval = setInterval(() => {
+        cookingData.secondsElapsed++;
+        cookingData.temp = Math.min(98.5, 93 + Math.sin(cookingData.secondsElapsed * 0.1) * 2.5);
+        renderLightLayer();
+        broadcastState('UPDATE_COOKING', cookingData);
+      }, 1000);
+
+      if (broadcast) {
+        broadcastState('START_COOKING', cookingData);
+      }
+    }
+
+    function triggerScenarioOverheat(broadcast = true) {
+      clearInterval(scanInterval);
+      clearInterval(cookingTimerInterval);
+      currentMode = 'overheat';
+      cookingData.active = true;
+      cookingData.potPlaced = true;
+      cookingData.temp = 290.0;
+      sound.playLowAlert();
+      const alertInterval = setInterval(() => {
+        if (currentMode === 'overheat') sound.playLowAlert();
+        else clearInterval(alertInterval);
+      }, 2200);
+
+      renderPotZone();
+      renderLightLayer();
+      updateDockActiveButton('btnOverheat');
+
+      if (broadcast) {
+        broadcastState('START_OVERHEAT', { temp: 290, awayDuration: 210, autoShutoffLeft: 90 });
+      }
+    }
+
+    function triggerScenarioDone(broadcast = true) {
+      currentMode = 'completed';
+      sound.playChime();
+      renderLightLayer();
+      updateDockActiveButton('btnDone');
+      if (broadcast) {
+        broadcastState('DONE_COOKING', {});
+      }
+      setTimeout(() => {
+        if (currentMode === 'completed') {
+          triggerScenarioCooking(false);
+        }
+      }, 3000);
+    }
+
+    function triggerPrepFresh(e) {
+      if (e) e.stopPropagation();
+      currentMode = 'prep_fresh';
+      sound.playChime();
+      renderLightLayer();
+    }
+
+    function triggerPrepSpoil(e) {
+      if (e) e.stopPropagation();
+      currentMode = 'prep_spoil';
+      sound.playLowAlert();
+      renderLightLayer();
+    }
+
+    function triggerScenarioRecipe(broadcast = true) {
+      currentMode = 'recipe';
+      sound.playWarmTone();
+      renderLightLayer();
+      updateDockActiveButton('btnRecipe');
+      if (broadcast) {
+        broadcastState('START_RECIPE', {});
+      }
+    }
+
+    // --- 6. Countertop Subsurface Click / Touch Ripple Effect ---
+    const slabEl = document.getElementById('slab');
+    slabEl.addEventListener('pointerdown', (e) => {
+      // 도마나 화구 내부의 버튼/오브젝트를 클릭한 경우 제외
+      if (e.target.closest('button') || e.target.closest('.pot-object')) return;
+
+      const rect = slabEl.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+
+      const ripple = document.createElement('div');
+      ripple.className = 'touch-ripple';
+      ripple.style.left = x + 'px';
+      ripple.style.top = y + 'px';
+      slabEl.appendChild(ripple);
+
+      sound.playStoneTap();
+
+      setTimeout(() => {
+        ripple.remove();
+      }, 1200);
+    });
+
+    // --- 7. Window Actions ---
+    document.getElementById('btnOpenMobile').addEventListener('click', () => {
+      window.open('mobile.html', 'MaterialUIMobile', 'width=420,height=860,left=100,top=100');
+    });
+
+    document.getElementById('btnToggleSound').addEventListener('click', () => {
+      sound.enabled = !sound.enabled;
+      document.getElementById('soundLabel').innerText = sound.enabled ? '🔊 SOUND ON' : '🔇 MUTED';
+    });
+
+    // Init
+    renderInventory();
+    renderPotZone();
+    renderLightLayer();
+  </script>
+</body>
+</html>
